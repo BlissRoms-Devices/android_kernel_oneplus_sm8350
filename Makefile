@@ -442,6 +442,7 @@ READELF		= $(CROSS_COMPILE)readelf
 OBJSIZE		= $(CROSS_COMPILE)size
 STRIP		= $(CROSS_COMPILE)strip
 endif
+LDFINAL		= $(LD)
 PAHOLE		= pahole
 LEX		= flex
 YACC		= bison
