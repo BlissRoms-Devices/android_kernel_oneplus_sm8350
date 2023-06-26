@@ -1728,7 +1728,6 @@ static int dwc3_probe(struct platform_device *pdev)
 	init_waitqueue_head(&dwc->wait_linkstate);
 	spin_lock_init(&dwc->lock);
 
-	pm_runtime_no_callbacks(dev);
 	pm_runtime_set_active(dev);
 	if (dwc->enable_bus_suspend) {
 		pm_runtime_set_autosuspend_delay(dev,
@@ -1820,6 +1819,9 @@ static int dwc3_remove(struct platform_device *pdev)
 
 	dwc3_debugfs_exit(dwc);
 	dwc3_gadget_exit(dwc);
+	dwc3_core_exit(dwc);
+	dwc3_ulpi_exit(dwc);
+
 	pm_runtime_disable(&pdev->dev);
 	pm_runtime_put_noidle(&pdev->dev);
 	pm_runtime_set_suspended(&pdev->dev);
@@ -2180,6 +2182,7 @@ static struct platform_driver dwc3_driver = {
 		.of_match_table	= of_match_ptr(of_dwc3_match),
 		.acpi_match_table = ACPI_PTR(dwc3_acpi_match),
 		.pm	= &dwc3_dev_pm_ops,
+		.probe_type = PROBE_FORCE_SYNCHRONOUS,
 	},
 };
 
